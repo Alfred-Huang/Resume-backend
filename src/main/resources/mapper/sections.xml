@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.resume.mapper.SectionMapper" >
+
+    <insert id="addSectionList" parameterType="List">
+        insert into sectionlist_table (section_id, info_id) values
+        <foreach collection="list" item="item" index= "index"  separator=",">
+            <foreach collection="item.infoIdList" index="index" item="infoIds" >
+                (#{item.sectionId}, #{infoIds})
+            </foreach>
+        </foreach>
+    </insert>
+
+    <insert id="addSection">
+        insert into sectionlist_table (section_id, info_id) values
+        <foreach collection="infoIdList" item="item" index="index" separator=",">
+            (#{sectionId}, #{item});
+        </foreach>
+
+    </insert>
+
+    <insert id="addSignalSection">
+        insert into sectionlist_table (section_Id, info_id) values (#{sectionId}, #{infoId})
+    </insert>
+
+    <delete id="deleteSectionInfo">
+        delete from sectionlist_table where info_id = #{infoId}
+    </delete>
+</mapper>

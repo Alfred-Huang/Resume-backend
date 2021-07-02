@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.resume.mapper.ResumeInfoMapper" >
+
+
+<!--    <resultMap id="resumeList" type="com.example.resume.pojo.Experience">-->
+<!--        <id property="moduleId" column="module_id" />-->
+<!--        <result property="module" column="module" />-->
+<!--        <result property="title" column="title" />-->
+<!--        <result property="sectionId" column="section_id" />-->
+<!--    </resultMap>-->
+
+   <select id="getResumeInfo" resultMap="resumeInfoMap">
+        select
+        t.section_id, t.info_id, t.resume_id, t.module_id, t.module, t.title, t.esection_id,
+        i.info_id iInfo_id, i.project, i.role, i.location, i.startdate, i.enddate, i.htmlcontent,
+        i.name, i.telephone, i.email, i.personallocation, i.other
+        from(
+                select s.section_id, s.info_id, e.resume_id, e.module_id, e.module, e.title, e.section_id esection_id from
+            (
+             select resume_id, module_id, module, title, section_id from experience_table where resume_id = #{resumeId}
+            ) e left join sectionlist_table s on e.section_id = s.section_id) t left join information_table i on t.info_id = i.info_id;
+   </select>
+
+    <resultMap id="resumeInfoMap" type="com.example.resume.pojo.ResumeInfo">
+        <result property="resumeId" column="resume_id" />
+        <collection property="experienceList" ofType="com.example.resume.pojo.Experience" javaType="ArrayList">
+            <id property="id" column="module_id" />
+            <result property="module" column="module" />
+            <result property="title" column="title" />
+            <result property="sectionId" column="section_id" />
+        </collection>
+        <collection property="sections" ofType="com.example.resume.pojo.Sections" javaType="ArrayList">
+            <id property="sectionId" column="section_id" />
+            <collection property="infoIdList" ofType="String" javaType="List">
+                <result property="String" column="info_id" />
+            </collection>
+        </collection>
+        <collection property="informationList" ofType="com.example.resume.pojo.Information" javaType="ArrayList">
+            <id property="infoId" column="info_id" />
+            <result property="project" column="project"/>
+            <result property="role" column="role"/>
+            <result property="location" column="location" />
+            <result property="startDate" column="startdate" />
+            <result property="endDate" column="enddate" />
+            <result property="HTMLContent" column="htmlcontent" />
+            <result property="name" column="name" />
+            <result property="telephone" column="telephone" />
+            <result property="email" column="email" />
+            <result property="personalLocation" column="personalLocation" />
+            <result property="other" column="other" />
+        </collection>
+    </resultMap>
+
+    <resultMap id="sectionMap" type="com.example.resume.pojo.Sections">
+        <result property="sectionId" column="section_id" />
+        <collection property="infoIdList" ofType="String" javaType="List">
+            <result property="String" column="info_id" />
+        </collection>
+    </resultMap>
+
+
+</mapper>

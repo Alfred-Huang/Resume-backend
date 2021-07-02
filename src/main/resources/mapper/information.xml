@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.resume.mapper.InformationMapper" >
+<!--    <select id="getModule" resultType="com.example.resume.pojo.Module">-->
+<!--        select module_id as id, module, sort_id as sortId from module_table where resume_id = #{resumeId}-->
+<!--    </select>-->
+
+    <insert id="addInformationList" parameterType="java.util.List">
+        insert into information_table (info_id, project, role, location, startdate, enddate, htmlcontent, name, telephone, email, personallocation, other) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.infoId}, #{item.project}, #{item.role}, #{item.location}, #{item.startDate}, #{item.endDate},
+             #{item.HTMLContent}, #{item.name}, #{item.telephone}, #{item.email}, #{item.personalLocation}, #{item.other})
+        </foreach>
+    </insert>
+
+
+    <insert id="addInformation">
+          insert into information_table (info_id, project, role, location, startdate, enddate, htmlcontent, name, telephone, email, personallocation, other) values (
+          #{infoId}, #{project}, #{role}, #{location}, #{startDate}, #{endDate}, #{HTMLContent}, #{name}, #{telephone}, #{email}, #{personalLocation}, #{other}
+          )
+    </insert>
+
+   <update id="updatePersonalInfo" >
+       update information_table set name=#{name}, telephone=#{telephone}, personallocation=#{personalLocation}, other=#{other} where info_id=#{infoId}
+   </update>
+
+    <update id="updateSummary" >
+       update information_table set htmlcontent=#{newData} where info_id=#{infoId}
+   </update>
+
+    <update id="updateGeneralInfo" >
+       update information_table set project=#{project}, role=#{role}, location=#{location}, startdate=#{startDate}, enddate=#{endDate}, htmlcontent=#{HTMLContent} where info_id=#{infoId}
+   </update>
+
+    <delete id="deleteInfo">
+        delete from information_table where info_id = #{infoId}
+    </delete>
+
+</mapper>

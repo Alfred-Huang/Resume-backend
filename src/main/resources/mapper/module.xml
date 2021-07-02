@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.resume.mapper.ModuleMapper" >
+    <select id="getModule" resultMap="getModuleMap">
+        select module_id as id, module, resume_id, sort_id from module_table where resume_id = #{resumeId}
+    </select>
+
+
+    <resultMap id="getModuleMap" type="com.example.resume.pojo.Module">
+        <id property="id" column="id" />
+        <result property="module" column="module" />
+        <result property="resumeId" column="resume_id" />
+        <result property="sortId" column="sort_id"/>
+    </resultMap>
+
+    <insert id="addModuleList" parameterType="java.util.List">
+        insert into module_table (module_id, resume_id, module, sort_id) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id}, #{item.resumeId}, #{item.module}, #{item.sortId})
+        </foreach>
+    </insert>
+
+
+    <insert id="addModule">
+        insert into module_table (module_id, resume_id, module, sort_id) values (#{id}, #{resumeId}, #{module}, #{sortId});
+    </insert>
+
+    <delete id="deleteModule">
+        delete from module_table where module_id = #{moduleId}
+    </delete>
+
+
+    <update id="updateModule">
+
+        <foreach collection="list" item="item" index="index" >
+            update module_table set sort_id = #{item.sortId} where module_id = #{item.id};
+        </foreach>
+    </update>
+</mapper>
